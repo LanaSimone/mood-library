@@ -1,9 +1,10 @@
 function SongCard({ song }) {
   return (
-    <div>
-      <p>{song.title}</p>
-      <p>{song.artist}</p>
-      <p>{song.mood}</p>
+    <div className="song-card">
+        <h3>{song.title}</h3>
+        <h3>{song.title}</h3>
+        <p>{song.artist}</p>
+        <span className="mood">{song.mood}</span>
     </div>
   );
 }

@@ -6,7 +6,7 @@ function Library() {
     <section className="page">
       <h2>Library</h2>
       <p>Your saved songs will appear here.</p>
-      <div>
+      <div className="song-grid">
         {songs.map((song) => (
             <SongCard key={song.id} song={song} />
         ))}
