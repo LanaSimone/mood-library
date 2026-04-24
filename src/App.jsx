@@ -5,11 +5,10 @@ import Home from "./pages/Home";
 import Library from "./pages/Library";
 import AddSong from "./pages/AddSong";
 import Moods from "./pages/Moods";
-import songData from "./data/songs";
 
 
 function App() {
-  const [songs, setSongs] = useState(songData)
+  const [songs, setSongs] = useState([])
   const [moods, setMoods] = useState([]);
   
   function addSong(newSong) {
@@ -32,6 +31,20 @@ function App() {
 
   fetchMoods();
 }, []);
+
+useEffect(() => {
+  async function fetchSongs() {
+    try {
+      const response = await fetch("http://localhost:5000/api/songs");
+      const data = await response.json();
+
+      setSongs(data)
+    } catch (error){
+      console.error("Error fetching songs:", error)
+    }
+  }
+  fetchSongs()
+}, [])
 
 console.log("App is rendering");
   return (
