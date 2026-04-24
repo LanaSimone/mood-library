@@ -1,20 +1,27 @@
 import { useState } from "react";
 
-function AddSong({ onAddSong }) {
+function AddSong({ onAddSong, moods }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [mood, setMood] = useState("");
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    console.log("submitted")
 
     const newSong = {
       title,
       artist,
-      mood
+      moodId: mood
     };
 
+    await fetch("http://localhost:5000/api/songs", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newSong)
+    })
+   
     onAddSong(newSong);
 
     setTitle("")
@@ -43,10 +50,14 @@ function AddSong({ onAddSong }) {
         </label>
         <label>
           Mood
-          <input
-            value={mood}
-            onChange={(event) => setMood(event.target.value)}
-          />
+          <select value={mood} onChange={(event) => setMood(event.target.value)}>
+            <option value="">Select a mood</option>
+            {moods.map((moodOption) => (
+                <option key={moodOption.id} value={moodOption.id}>
+                    {moodOption.mood}
+                </option>
+            ))}
+        </select>
         </label>
         <button type="submit">Add Song</button>
       </form>
