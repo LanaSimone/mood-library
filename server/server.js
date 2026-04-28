@@ -97,8 +97,7 @@ app.get("/api/songs", (request, response) => {
 });
 
 app.post("/api/songs", (request, response) => {
-  const { title, artist, moodId } = request.body;
-  const userId = 1;
+  const { title, artist, moodId, userId } = request.body;
 
   database.run(
     "INSERT INTO songs (title, artist, userId, moodId) VALUES (?, ?, ?, ?)",
