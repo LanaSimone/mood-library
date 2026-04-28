@@ -55,7 +55,7 @@ console.log("App is rendering");
         <Route path="/" element={<Home />} />
         <Route
           path="/library"
-          element={<Library songList={songs} />}
+          element={<Library songList={songs} fetchSongs={fetchSongs} />}
         />
         <Route path="/add-song" element={<AddSong moods={moods} fetchSongs={fetchSongs} />} />
         <Route path="/moods" element={<Moods songs={songs} />} />

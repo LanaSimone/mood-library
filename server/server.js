@@ -59,3 +59,22 @@ app.post("/api/songs", (request, response) => {
     }
   );
 });
+
+app.delete("/api/songs/:id", (request, response) => {
+  const songId = request.params.id;
+
+  database.run(
+    "DELETE FROM songs WHERE id = ?",
+    [songId],
+    function (error) {
+      if (error) {
+        return response.status(500).json({ error: error.message });
+      }
+
+      return response.status(200).json({
+        message: "Song deleted successfully",
+        deletedId: songId
+      });
+    }
+  );
+});
