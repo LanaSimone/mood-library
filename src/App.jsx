@@ -32,17 +32,18 @@ function App() {
   fetchMoods();
 }, []);
 
-useEffect(() => {
-  async function fetchSongs() {
-    try {
-      const response = await fetch("http://localhost:5000/api/songs");
-      const data = await response.json();
+async function fetchSongs() {
+  try {
+    const response = await fetch("http://localhost:5000/api/songs");
+    const data = await response.json();
 
-      setSongs(data)
-    } catch (error){
-      console.error("Error fetching songs:", error)
-    }
+    setSongs(data)
+  } catch (error){
+    console.error("Error fetching songs:", error)
   }
+}
+
+useEffect(() => {
   fetchSongs()
 }, [])
 
@@ -56,7 +57,7 @@ console.log("App is rendering");
           path="/library"
           element={<Library songList={songs} />}
         />
-        <Route path="/add-song" element={<AddSong onAddSong={addSong} moods={moods} />} />
+        <Route path="/add-song" element={<AddSong onAddSong={addSong} moods={moods} fetchSongs={fetchSongs}/>} />
         <Route path="/moods" element={<Moods />} />
       </Routes>
     </div>

@@ -29,13 +29,18 @@ app.get("/api/moods", (request, response) => {
 });
 
 app.get("/api/songs", (request, response) => {
-  database.all("SELECT * FROM songs", (error, rows) => {
-    if (error) {
-      return response.status(500).json(error);
-    }
+  database.all(
+    `SELECT songs.id, songs.title, songs.artist, moods.mood
+     FROM songs
+     JOIN moods ON songs.moodId = moods.id`,
+    (error, rows) => {
+      if (error) {
+        return response.status(500).json(error);
+      }
 
-    return response.status(200).json(rows);
-  });
+      return response.status(200).json(rows);
+    }
+  );
 });
 
 app.post("/api/songs", (request, response) => {

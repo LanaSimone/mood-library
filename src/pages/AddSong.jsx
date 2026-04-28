@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function AddSong({ onAddSong, moods }) {
+function AddSong({ onAddSong, moods, fetchSongs }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [mood, setMood] = useState("");
@@ -20,13 +20,14 @@ function AddSong({ onAddSong, moods }) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(newSong)
-    })
+    });
    
-    onAddSong(newSong);
+    await fetchSongs()
 
     setTitle("")
     setArtist("")
     setMood("")
+
   }
 
   return (
