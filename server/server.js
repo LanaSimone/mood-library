@@ -82,10 +82,18 @@ app.post("/api/login", (request, response) => {
 });
 
 app.get("/api/songs", (request, response) => {
+  const { userId } = request.query;
+
+  if (!userId) {
+    return response.status(400).json({ error: "userId is required" });
+  }
+
   database.all(
     `SELECT songs.id, songs.title, songs.artist, moods.mood
      FROM songs
-     JOIN moods ON songs.moodId = moods.id`,
+     JOIN moods ON songs.moodId = moods.id
+     WHERE songs.userId = ?`,
+    [userId],
     (error, rows) => {
       if (error) {
         return response.status(500).json(error);
