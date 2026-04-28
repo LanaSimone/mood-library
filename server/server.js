@@ -28,6 +28,59 @@ app.get("/api/moods", (request, response) => {
   });
 });
 
+app.post("/api/register", (request, response) => {
+  const { username, password } = request.body;
+
+  if (!username || !password) {
+    return response.status(400).json({ error: "Username and password are required" });
+  }
+
+  database.run(
+    "INSERT INTO users (username, password) VALUES (?, ?)",
+    [username, password],
+    function (error) {
+      if (error) {
+        return response.status(400).json({ error: "Username already exists" });
+      }
+
+      return response.status(201).json({
+        message: "User registered successfully",
+        user: {
+          id: this.lastID,
+          username
+        }
+      });
+    }
+  );
+});
+
+app.post("/api/login", (request, response) => {
+  const { username, password } = request.body;
+
+  if (!username || !password) {
+    return response.status(400).json({ error: "Username and password are required" });
+  }
+
+  database.get(
+    "SELECT id, username FROM users WHERE username = ? AND password = ?",
+    [username, password],
+    (error, user) => {
+      if (error) {
+        return response.status(500).json({ error: error.message });
+      }
+
+      if (!user) {
+        return response.status(401).json({ error: "Invalid username or password" });
+      }
+
+      return response.status(200).json({
+        message: "Login successful",
+        user
+      });
+    }
+  );
+});
+
 app.get("/api/songs", (request, response) => {
   database.all(
     `SELECT songs.id, songs.title, songs.artist, moods.mood

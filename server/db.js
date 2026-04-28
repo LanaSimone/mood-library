@@ -19,6 +19,11 @@ const database = new sqlite3.Database(databasePath, (error) => {
       `);
 
       database.run(`
+        INSERT OR IGNORE INTO users (username, password)
+        VALUES ("demo", "demo123")
+      `);
+
+      database.run(`
         CREATE TABLE IF NOT EXISTS moods (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           mood TEXT UNIQUE
