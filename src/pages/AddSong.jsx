@@ -1,34 +1,42 @@
 import { useState } from "react";
 
-function AddSong({ onAddSong, moods, fetchSongs }) {
+function AddSong({ moods, fetchSongs }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [mood, setMood] = useState("");
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+async function handleSubmit(event) {
+  event.preventDefault();
 
-    const newSong = {
-      title,
-      artist,
-      moodId: mood
-    };
-
-    await fetch("http://localhost:5000/api/songs", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newSong)
-    });
-   
-    await fetchSongs()
-
-    setTitle("")
-    setArtist("")
-    setMood("")
-
+  if (!title || !artist || !mood) {
+    return;
   }
+
+  const newSong = {
+    title,
+    artist,
+    moodId: Number(mood)
+  };
+
+  const response = await fetch("http://localhost:5000/api/songs", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(newSong)
+  });
+
+  if (!response.ok) {
+    console.error("Failed to add song");
+    return;
+  }
+
+  await fetchSongs();
+
+  setTitle("");
+  setArtist("");
+  setMood("");
+}
 
   return (
     <section className="page">
