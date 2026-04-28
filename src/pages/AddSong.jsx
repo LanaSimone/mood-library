@@ -1,12 +1,16 @@
 import { useState } from "react";
 
-function AddSong({ moods, fetchSongs }) {
+function AddSong({ moods, fetchSongs, currentUser }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [mood, setMood] = useState("");
 
 async function handleSubmit(event) {
   event.preventDefault();
+
+  if (!currentUser) {
+    return;
+  }
 
   if (!title || !artist || !mood) {
     return;
@@ -15,7 +19,8 @@ async function handleSubmit(event) {
   const newSong = {
     title,
     artist,
-    moodId: Number(mood)
+    moodId: Number(mood),
+    userId: currentUser.id
   };
 
   const response = await fetch("http://localhost:5000/api/songs", {
