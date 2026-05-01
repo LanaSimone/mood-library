@@ -89,7 +89,7 @@ app.get("/api/songs", (request, response) => {
   }
 
   database.all(
-    `SELECT songs.id, songs.title, songs.artist, songs.moodId, moods.mood
+    `SELECT songs.id, songs.title, songs.artist, songs.moodId, songs.songUrl, moods.mood
      FROM songs
      JOIN moods ON songs.moodId = moods.id
      WHERE songs.userId = ?`,
@@ -105,11 +105,11 @@ app.get("/api/songs", (request, response) => {
 });
 
 app.post("/api/songs", (request, response) => {
-  const { title, artist, moodId, userId } = request.body;
+  const { title, artist, moodId, userId, songUrl } = request.body;
 
   database.run(
-    "INSERT INTO songs (title, artist, userId, moodId) VALUES (?, ?, ?, ?)",
-    [title, artist, userId, moodId],
+    "INSERT INTO songs (title, artist, userId, moodId, songUrl) VALUES (?, ?, ?, ?, ?)",
+    [title, artist, userId, moodId, songUrl],
     (error) => {
       if (error) {
         return response.status(500).json(error);

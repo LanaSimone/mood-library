@@ -4,6 +4,7 @@ function AddSong({ moods, fetchSongs, currentUser }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [mood, setMood] = useState("");
+  const [songUrl, setSongUrl] = useState("");
 
 async function handleSubmit(event) {
   event.preventDefault();
@@ -20,7 +21,8 @@ async function handleSubmit(event) {
     title,
     artist,
     moodId: Number(mood),
-    userId: currentUser.id
+    userId: currentUser.id,
+    songUrl 
   };
 
   const response = await fetch("http://localhost:5000/api/songs", {
@@ -41,6 +43,7 @@ async function handleSubmit(event) {
   setTitle("");
   setArtist("");
   setMood("");
+  setSongUrl("")
 }
 
   return (
@@ -72,6 +75,13 @@ async function handleSubmit(event) {
                 </option>
             ))}
         </select>
+        </label>
+        <label>
+          Song URL (YouTube)
+          <input
+            value={songUrl}
+            onChange={(e) => setSongUrl(e.target.value)}
+          />
         </label>
         <button type="submit">Add Song</button>
       </form>

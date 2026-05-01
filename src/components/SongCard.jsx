@@ -22,6 +22,7 @@ function SongCard({ song, moods, onDelete, onEdit }) {
     setIsEditing(false);
   }
 
+
   if (isEditing) {
     return (
       <div className="song-card">
@@ -54,29 +55,53 @@ function SongCard({ song, moods, onDelete, onEdit }) {
     );
   }
 
+  function getEmbedUrl(url) {
+  if (!url) return null;
+
+  const videoId = url.split("v=")[1];
+  if (!videoId) return null;
+
+  return `https://www.youtube.com/embed/${videoId}`;
+}
+
+const embedUrl = getEmbedUrl(song.songUrl);
+
   return (
-    <div className="song-card">
-      <h3>{song.title}</h3>
-      <p>{song.artist}</p>
-      <span className="mood">{song.mood}</span>
-      <div className="song-actions">
-        <button 
-          className="icon-button"
-          onClick={() => setIsEditing(true)} 
-          aria-label="Edit song"
-        >
-          <Pencil size={18} strokeWidth={1.2} />
-        </button>
-        <button 
-          className="icon-button"
-          onClick={() => onDelete(song.id)} 
-          aria-label="Delete song"
-        >
-          <Trash2 size={18} strokeWidth={1.5} />
-        </button>
-      </div>
+  <div className="song-card">
+    <h3>{song.title}</h3>
+    <p>{song.artist}</p>
+    <span className="mood">{song.mood}</span>
+
+    {embedUrl && (
+      <iframe
+        width="100%"
+        height="200"
+        src={embedUrl}
+        title="YouTube player"
+        frameBorder="0"
+        allowFullScreen
+      ></iframe>
+    )}
+
+    <div className="song-actions">
+      <button 
+        className="icon-button"
+        onClick={() => setIsEditing(true)} 
+        aria-label="Edit song"
+      >
+        <Pencil size={18} strokeWidth={1.2} />
+      </button>
+
+      <button 
+        className="icon-button"
+        onClick={() => onDelete(song.id)} 
+        aria-label="Delete song"
+      >
+        <Trash2 size={18} strokeWidth={1.5} />
+      </button>
     </div>
-  );
+  </div>
+  )
 }
 
 export default SongCard;

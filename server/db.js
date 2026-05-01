@@ -36,9 +36,14 @@ const database = new sqlite3.Database(databasePath, (error) => {
           title TEXT,
           artist TEXT,
           userId INTEGER,
-          moodId INTEGER
+          moodId INTEGER,
+          songUrl TEXT
         )
       `);
+
+      // database.run(`
+      //   ALTER TABLE songs ADD COLUMN songUrl TEXT
+      // `);
 
       database.run(`
         INSERT OR IGNORE INTO moods (mood)
