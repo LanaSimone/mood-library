@@ -140,7 +140,7 @@ if (!currentUser) {
           />
         }
       />
-      <Route path="/moods" element={<Moods songs={songs} />} />
+      <Route path="/moods" element={<Moods songs={songs} moods={moods} />} />
     </Routes>
   </div>
   )
