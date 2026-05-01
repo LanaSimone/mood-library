@@ -113,12 +113,20 @@ if (!currentUser) {
     </div>
   );
 }
-
   return (
   <div>
     <Navbar currentUser={currentUser} onLogout={handleLogout} />
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route
+        path="/"
+        element={
+          <Home
+            songs={songs}
+            moods={moods}
+            currentUser={currentUser}
+          />
+        }
+      />
       <Route
         path="/library"
         element={

@@ -4,31 +4,47 @@ import { Link } from "react-router-dom";
 function Login({ onLogin, onDemoLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setErrorMessage("");
+
+    if (!username.trim()) {
+        setErrorMessage("Please enter your username.");
+        return;
+    }
+
+    if (!password.trim()) {
+        setErrorMessage("Please enter your password.");
+        return;
+    }
 
     const response = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: {
+        method: "POST",
+        headers: {
         "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username, password })
+        },
+        body: JSON.stringify({
+        username: username.trim(),
+        password
+        })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error(data.error);
-      return;
+        setErrorMessage(data.error || "Login failed.");
+        return;
     }
 
     onLogin(data.user);
-  }
+}
 
   return (
     <section className="page">
       <h2>Login</h2>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Username

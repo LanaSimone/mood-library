@@ -1,56 +1,83 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Register({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(event) {
-    event.preventDefault();
+  event.preventDefault();
+  setErrorMessage("");
 
-    const response = await fetch("http://localhost:5000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username, password })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error(data.error);
-      return;
-    }
-
-    onLogin(data.user);
+  if (!username.trim()) {
+    setErrorMessage("Please enter a username.");
+    return;
   }
 
-  return (
-    <section className="page">
-      <h2>Register</h2>
+  if (username.trim().length < 3) {
+    setErrorMessage("Username must be at least 3 characters.");
+    return;
+  }
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username
-          <input
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </label>
+  if (!password.trim()) {
+    setErrorMessage("Please enter a password.");
+    return;
+  }
 
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
+  if (password.length < 6) {
+    setErrorMessage("Password must be at least 6 characters.");
+    return;
+  }
 
-        <button type="submit">Create Account</button>
-      </form>
-    </section>
-  );
+  const response = await fetch("http://localhost:5000/api/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: username.trim(),
+      password
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    setErrorMessage(data.error || "Registration failed.");
+    return;
+  }
+
+  onLogin(data.user);
 }
+
+    return (
+        <section className="page">
+        <h2>Register</h2>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <form onSubmit={handleSubmit}>
+            <label>
+            Username
+            <input
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+            />
+            </label>
+            <label>
+            Password
+            <input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+            />
+            </label>
+            <button type="submit">Create Account</button>
+        </form>
+        <p className="auth-switch">
+            Already have an account? <Link to="/login">Log in</Link>
+        </p>
+        </section>
+        );
+    }
 
 export default Register;

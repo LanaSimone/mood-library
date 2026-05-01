@@ -5,24 +5,43 @@ function AddSong({ moods, fetchSongs, currentUser }) {
   const [artist, setArtist] = useState("");
   const [mood, setMood] = useState("");
   const [songUrl, setSongUrl] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
 async function handleSubmit(event) {
   event.preventDefault();
+  setErrorMessage("");
 
   if (!currentUser) {
+    setErrorMessage("Please log in before adding a song.");
     return;
   }
 
-  if (!title || !artist || !mood) {
+  if (!title.trim()) {
+    setErrorMessage("Please enter a song title.");
+    return;
+  }
+
+  if (!artist.trim()) {
+    setErrorMessage("Please enter an artist name.");
+    return;
+  }
+
+  if (!mood) {
+    setErrorMessage("Please select a mood.");
+    return;
+  }
+
+  if (songUrl && !songUrl.includes("youtube.com") && !songUrl.includes("youtu.be")) {
+    setErrorMessage("Please enter a valid YouTube URL.");
     return;
   }
 
   const newSong = {
-    title,
-    artist,
+    title: title.trim(),
+    artist: artist.trim(),
     moodId: Number(mood),
     userId: currentUser.id,
-    songUrl 
+    songUrl: songUrl.trim()
   };
 
   const response = await fetch("http://localhost:5000/api/songs", {
@@ -34,7 +53,7 @@ async function handleSubmit(event) {
   });
 
   if (!response.ok) {
-    console.error("Failed to add song");
+    setErrorMessage("Something went wrong while adding the song.");
     return;
   }
 
@@ -43,13 +62,14 @@ async function handleSubmit(event) {
   setTitle("");
   setArtist("");
   setMood("");
-  setSongUrl("")
+  setSongUrl("");
 }
 
   return (
     <section className="page">
       <h2>Add Song</h2>
       <p>Add a new song to your collection.</p>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Title
