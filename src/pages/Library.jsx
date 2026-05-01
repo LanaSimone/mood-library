@@ -1,23 +1,47 @@
 import SongCard from "../components/SongCard";
 
-function Library({ songList, fetchSongs }) {
+function Library({ songList, fetchSongs, moods, currentUser }) {
   async function handleDelete(songId) {
-  try {
-    const response = await fetch(`http://localhost:5000/api/songs/${songId}`, {
-      method: "DELETE"
-    });
+    try {
+      const response = await fetch(`http://localhost:5000/api/songs/${songId}`, {
+        method: "DELETE"
+      });
 
-    if (!response.ok) {
-      throw new Error("Failed to delete song");
+      if (!response.ok) {
+        throw new Error("Failed to delete song");
+      }
+
+      fetchSongs();
+    } catch (error) {
+      console.error("Error deleting song:", error);
     }
-
-    fetchSongs();
-  } catch (error) {
-    console.error("Error deleting song:", error);
   }
-}
-  
-  
+
+  async function handleEdit(updatedSong) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/songs/${updatedSong.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: updatedSong.title,
+          artist: updatedSong.artist,
+          moodId: updatedSong.moodId,
+          userId: currentUser.id
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update song");
+      }
+
+      fetchSongs();
+    } catch (error) {
+      console.error("Error updating song:", error);
+    }
+  }
+
   return (
     <section className="page">
       <h2>Library</h2>
@@ -25,10 +49,12 @@ function Library({ songList, fetchSongs }) {
       <p>Your saved songs will appear here.</p>
       <div className="song-grid">
         {songList.map((song) => (
-          <SongCard 
-            key={song.id} 
-            song={song} 
+          <SongCard
+            key={song.id}
+            song={song}
+            moods={moods}
             onDelete={handleDelete}
+            onEdit={handleEdit}
           />
         ))}
       </div>

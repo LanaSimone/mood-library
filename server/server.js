@@ -89,7 +89,7 @@ app.get("/api/songs", (request, response) => {
   }
 
   database.all(
-    `SELECT songs.id, songs.title, songs.artist, moods.mood
+    `SELECT songs.id, songs.title, songs.artist, songs.moodId, moods.mood
      FROM songs
      JOIN moods ON songs.moodId = moods.id
      WHERE songs.userId = ?`,
@@ -116,6 +116,32 @@ app.post("/api/songs", (request, response) => {
       } else {
         return response.status(201).json({ message: "Song added" });
       }
+    }
+  );
+});
+
+app.put("/api/songs/:id", (request, response) => {
+  const songId = request.params.id;
+  const { title, artist, moodId, userId } = request.body;
+
+  if (!title || !artist || !moodId || !userId) {
+    return response.status(400).json({ error: "Missing required song fields" });
+  }
+
+  database.run(
+    `UPDATE songs 
+     SET title = ?, artist = ?, moodId = ?
+     WHERE id = ? AND userId = ?`,
+    [title, artist, moodId, songId, userId],
+    function (error) {
+      if (error) {
+        return response.status(500).json({ error: error.message });
+      }
+
+      return response.status(200).json({
+        message: "Song updated successfully",
+        updatedId: songId
+      });
     }
   );
 });

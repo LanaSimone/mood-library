@@ -68,6 +68,19 @@ body {
   font-size: 0.85rem;
 }
 
+.icon-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.icon-button:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
 .song-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

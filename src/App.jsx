@@ -121,7 +121,14 @@ if (!currentUser) {
       <Route path="/" element={<Home />} />
       <Route
         path="/library"
-        element={<Library songList={songs} fetchSongs={fetchSongs} />}
+        element={
+          <Library
+            songList={songs}
+            fetchSongs={fetchSongs}
+            moods={moods}
+            currentUser={currentUser}
+          />
+        }
       />
       <Route
         path="/add-song"
