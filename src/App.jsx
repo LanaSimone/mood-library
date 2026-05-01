@@ -13,14 +13,10 @@ function App() {
   const [songs, setSongs] = useState([]);
   const [moods, setMoods] = useState([]);
   const [currentUser, setCurrentUser] = useState(() => {
-  const savedUser = localStorage.getItem("currentUser");
-
-  if (savedUser) {
-    return JSON.parse(savedUser);
-  }
-    return null;
+    const savedUser = localStorage.getItem("currentUser");
+    return savedUser ? JSON.parse(savedUser) : null;
   });
-  
+
   useEffect(() => {
     fetchSongs();
   }, [currentUser]);
