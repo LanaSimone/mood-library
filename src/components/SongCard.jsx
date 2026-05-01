@@ -56,12 +56,32 @@ function SongCard({ song, moods, onDelete, onEdit }) {
   }
 
   function getEmbedUrl(url) {
-  if (!url) return null;
+  if (!url) {
+    return null;
+  }
 
-  const videoId = url.split("v=")[1];
-  if (!videoId) return null;
+  try {
+    const youtubeUrl = new URL(url);
 
-  return `https://www.youtube.com/embed/${videoId}`;
+    if (youtubeUrl.hostname.includes("youtu.be")) {
+      const videoId = youtubeUrl.pathname.slice(1);
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    if (youtubeUrl.hostname.includes("youtube.com")) {
+      const videoId = youtubeUrl.searchParams.get("v");
+
+      if (!videoId) {
+        return null;
+      }
+
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    return null;
+  } catch (error) {
+    return null;
+  }
 }
 
 const embedUrl = getEmbedUrl(song.songUrl);
