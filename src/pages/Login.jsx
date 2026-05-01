@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Login({ onLogin, onDemoLogin }) {
   const [username, setUsername] = useState("");
@@ -28,7 +29,6 @@ function Login({ onLogin, onDemoLogin }) {
   return (
     <section className="page">
       <h2>Login</h2>
-
       <form onSubmit={handleSubmit}>
         <label>
           Username
@@ -37,7 +37,6 @@ function Login({ onLogin, onDemoLogin }) {
             onChange={(event) => setUsername(event.target.value)}
           />
         </label>
-
         <label>
           Password
           <input
@@ -46,13 +45,14 @@ function Login({ onLogin, onDemoLogin }) {
             onChange={(event) => setPassword(event.target.value)}
           />
         </label>
-
         <button type="submit">Login</button>
       </form>
-
       <button type="button" onClick={onDemoLogin}>
         Demo Login
       </button>
+      <p className="auth-switch">
+        Don&apos;t have an account? <Link to="/register">Create one</Link>
+      </p>
     </section>
   );
 }

@@ -20,80 +20,26 @@ body {
   max-width: 420px;
   padding: 2rem;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05); /* FIXED */
-  backdrop-filter: blur(12px); /* added */
-  border: 1px solid rgba(255, 255, 255, 0.08); /* added */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
-/* SONG CARDS */
-
-.song-card {
-  background: rgba(255, 255, 255, 0.04);
-  padding: 18px;
-  border-radius: 16px;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.song-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-4px);
-}
-
-.song-card h3 {
-  margin: 0 0 6px;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.song-card p {
-  margin: 0;
-  color: #9ca3af;
-  font-size: 0.9rem;
-}
-
-.song-card p:first-child {
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.song-card p:nth-child(2) {
-  color: #b3b3b3;
-}
-
-.song-card p:last-child {
-  color: #1db954;
-  font-size: 0.85rem;
-}
-
-.icon-button {
-  background: none;
-  border: none;
-  padding: 4px;
-  cursor: pointer;
+.auth-switch {
+  margin-top: 16px;
+  text-align: center;
   color: #9ca3af;
 }
 
-.icon-button:hover {
-  color: #ffffff;
-  transform: scale(1.1);
-}
-
-.song-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.mood {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 0.8rem;
+.auth-switch a {
   color: #a78bfa;
+  text-decoration: none;
   font-weight: 600;
+}
+
+.auth-switch a:hover {
+  color: #ffffff;
 }
 
 /* NAVBAR */
@@ -127,8 +73,6 @@ body {
   color: #ffffff;
 }
 
-/* USER SECTION */
-
 .nav-user {
   display: flex;
   align-items: center;
@@ -154,4 +98,195 @@ body {
   max-width: 1000px;
   margin: 0 auto;
   padding: 40px 20px;
+}
+
+/* FORMS */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #d1d5db;
+}
+
+input,
+select {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  font-size: 0.95rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+}
+
+select option {
+  background: #161a22;
+  color: #e5e7eb;
+}
+
+/* BUTTONS */
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #8b5cf6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: #7c3aed;
+  transform: translateY(-1px);
+}
+
+/* ICON BUTTONS */
+
+.icon-button {
+  background: none;
+  border: none;
+  padding: 3px;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.icon-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.icon-button:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* SONG CARDS */
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+.song-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: fit-content;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 22px;
+  border-radius: 18px;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 3px solid #a78bfa;
+}
+
+.song-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+}
+
+.song-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.song-card h3,
+.song-card p {
+  overflow-wrap: anywhere;
+}
+
+.song-card p {
+  margin: 0;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.mood {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #a78bfa;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.song-actions {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 6px;
+}
+
+.song-card iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  max-height: 150px;
+  margin-top: 14px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* MOOD PLAYLISTS */
+
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.mood-card {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 3px solid #8b5cf6;
+  transition: all 0.2s ease;
+}
+
+.mood-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+}
+
+.mood-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: #ffffff;
+  text-transform: capitalize;
+}
+
+.mood-card p {
+  margin: 0 0 6px;
+  color: #9ca3af;
+}
+
+.preview-song {
+  margin-top: 12px;
+  color: #a78bfa !important;
+  font-size: 0.9rem;
 }
