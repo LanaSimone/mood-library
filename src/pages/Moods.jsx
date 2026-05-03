@@ -16,6 +16,10 @@ function Moods({ songs, moods }) {
   if (selectedMood) {
     const selectedSongs = groupedSongs[selectedMood] || [];
 
+    {selectedSongs.length === 0 && (
+        <p>This playlist is empty.</p>
+    )}
+
     return (
       <section className="page">
         <button onClick={() => setSelectedMood(null)}>
@@ -48,6 +52,9 @@ function Moods({ songs, moods }) {
       <h2>Mood Playlists</h2>
       <p>Pick a mood and play songs that match how you feel.</p>
       <div className="mood-grid">
+        {Object.keys(groupedSongs).length === 0 && (
+            <p>No playlists yet. Add songs to create your first mood playlist.</p>
+        )}
         {Object.entries(groupedSongs).map(([mood, moodSongs]) => (
           <div
             className="mood-card"

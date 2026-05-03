@@ -6,6 +6,7 @@ function AddSong({ moods, fetchSongs, currentUser }) {
   const [mood, setMood] = useState("");
   const [songUrl, setSongUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
 async function handleSubmit(event) {
   event.preventDefault();
@@ -63,6 +64,7 @@ async function handleSubmit(event) {
   setArtist("");
   setMood("");
   setSongUrl("");
+  setSuccessMessage("Song added successfully!");
 }
 
   return (
@@ -70,6 +72,7 @@ async function handleSubmit(event) {
       <h2>Add Song</h2>
       <p>Add a new song to your collection.</p>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Title

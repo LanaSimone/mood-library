@@ -47,6 +47,9 @@ function Library({ songList, fetchSongs, moods, currentUser }) {
       <h2>Library</h2>
       <p>Total songs: {songList.length}</p>
       <p>Your saved songs will appear here.</p>
+      {songList.length === 0 && (
+        <p>No songs yet. Add your first song to get started.</p>
+      )}
       <div className="song-grid">
         {songList.map((song) => (
           <SongCard
