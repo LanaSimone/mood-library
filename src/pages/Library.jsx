@@ -2,6 +2,12 @@ import SongCard from "../components/SongCard";
 
 function Library({ songList, fetchSongs, moods, currentUser }) {
   async function handleDelete(songId) {
+    const confirmDelete = window.confirm("Delete this song?");
+
+    if (!confirmDelete) {
+      return;
+    }
+
     try {
       const response = await fetch(`http://localhost:5000/api/songs/${songId}`, {
         method: "DELETE"
@@ -17,29 +23,8 @@ function Library({ songList, fetchSongs, moods, currentUser }) {
     }
   }
 
-  async function handleEdit(updatedSong) {
-    try {
-      const response = await fetch(`http://localhost:5000/api/songs/${updatedSong.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title: updatedSong.title,
-          artist: updatedSong.artist,
-          moodId: updatedSong.moodId,
-          userId: currentUser.id
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update song");
-      }
-
-      fetchSongs();
-    } catch (error) {
-      console.error("Error updating song:", error);
-    }
+  function handleEdit() {
+    console.log("Edit not implemented yet");
   }
 
   return (

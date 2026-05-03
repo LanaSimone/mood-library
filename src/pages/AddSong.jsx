@@ -11,6 +11,7 @@ function AddSong({ moods, fetchSongs, currentUser }) {
 async function handleSubmit(event) {
   event.preventDefault();
   setErrorMessage("");
+  setSuccessMessage("");
 
   if (!currentUser) {
     setErrorMessage("Please log in before adding a song.");
