@@ -3,112 +3,139 @@ import { useState } from "react";
 function AddSong({ moods, fetchSongs, currentUser }) {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
-  const [mood, setMood] = useState("");
-  const [songUrl, setSongUrl] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [moodId, setMoodId] = useState("");
+  const [url, setUrl] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
-async function handleSubmit(event) {
-  event.preventDefault();
-  setErrorMessage("");
-  setSuccessMessage("");
-
-  if (!currentUser) {
-    setErrorMessage("Please log in before adding a song.");
-    return;
+  function showMessage(text, type) {
+    setMessage(text);
+    setMessageType(type);
   }
 
-  if (!title.trim()) {
-    setErrorMessage("Please enter a song title.");
-    return;
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!title.trim()) {
+      showMessage("Please enter a song title.", "error");
+      return;
+    }
+
+    if (!artist.trim()) {
+      showMessage("Please enter an artist name.", "error");
+      return;
+    }
+
+    if (!moodId) {
+      showMessage("Please select a mood.", "error");
+      return;
+    }
+
+    if (!url.trim()) {
+      showMessage("Please enter a YouTube URL.", "error");
+      return;
+    }
+
+    if (!url.includes("youtube.com") && !url.includes("youtu.be")) {
+      showMessage("Please enter a valid YouTube URL.", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/songs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title: title.trim(),
+          artist: artist.trim(),
+          moodId,
+          url: url.trim(),
+          userId: currentUser.id
+        })
+      });
+
+      if (!response.ok) {
+        showMessage("Song could not be added. Please try again.", "error");
+        return;
+      }
+
+      await fetchSongs();
+
+      setTitle("");
+      setArtist("");
+      setMoodId("");
+      setUrl("");
+
+      showMessage("Song added successfully!", "success");
+    } catch (error) {
+      console.error("Error adding song:", error);
+      showMessage("Something went wrong while adding the song.", "error");
+    }
   }
-
-  if (!artist.trim()) {
-    setErrorMessage("Please enter an artist name.");
-    return;
-  }
-
-  if (!mood) {
-    setErrorMessage("Please select a mood.");
-    return;
-  }
-
-  if (songUrl && !songUrl.includes("youtube.com") && !songUrl.includes("youtu.be")) {
-    setErrorMessage("Please enter a valid YouTube URL.");
-    return;
-  }
-
-  const newSong = {
-    title: title.trim(),
-    artist: artist.trim(),
-    moodId: Number(mood),
-    userId: currentUser.id,
-    songUrl: songUrl.trim()
-  };
-
-  const response = await fetch("http://localhost:5000/api/songs", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(newSong)
-  });
-
-  if (!response.ok) {
-    setErrorMessage("Something went wrong while adding the song.");
-    return;
-  }
-
-  await fetchSongs();
-
-  setTitle("");
-  setArtist("");
-  setMood("");
-  setSongUrl("");
-  setSuccessMessage("Song added successfully!");
-}
 
   return (
-    <section className="page">
-      <h2>Add Song</h2>
-      <p>Add a new song to your collection.</p>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title
-          <input
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-          />
-        </label>
-        <label>
-          Artist
-          <input
-            value={artist}
-            onChange={(event) => setArtist(event.target.value)}
-          />
-        </label>
-        <label>
-          Mood
-          <select value={mood} onChange={(event) => setMood(event.target.value)}>
-            <option value="">Select a mood</option>
-            {moods.map((moodOption) => (
-                <option key={moodOption.id} value={moodOption.id}>
-                    {moodOption.mood}
+    <section className="page add-song-page">
+      <div className="form-card">
+        <h2>Add Song</h2>
+        <p>Add a new song to your collection.</p>
+
+        {message && (
+          <div className={`form-message ${messageType}`}>
+            {message}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <label>
+            Title
+            <input
+              type="text"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Enter song title"
+            />
+          </label>
+
+          <label>
+            Artist
+            <input
+              type="text"
+              value={artist}
+              onChange={(event) => setArtist(event.target.value)}
+              placeholder="Enter artist name"
+            />
+          </label>
+
+          <label>
+            Mood
+            <select
+              value={moodId}
+              onChange={(event) => setMoodId(event.target.value)}
+            >
+              <option value="">Select a mood</option>
+              {moods.map((mood) => (
+                <option key={mood.id} value={mood.id}>
+                  {mood.mood}
                 </option>
-            ))}
-        </select>
-        </label>
-        <label>
-          Song URL (YouTube)
-          <input
-            value={songUrl}
-            onChange={(e) => setSongUrl(e.target.value)}
-          />
-        </label>
-        <button type="submit">Add Song</button>
-      </form>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Song URL (YouTube)
+            <input
+              type="text"
+              value={url}
+              onChange={(event) => setUrl(event.target.value)}
+              placeholder="Enter YouTube link"
+            />
+          </label>
+
+          <button type="submit">Add Song</button>
+        </form>
+      </div>
     </section>
   );
 }

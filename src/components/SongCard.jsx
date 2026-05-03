@@ -91,18 +91,16 @@ const embedUrl = getEmbedUrl(song.songUrl);
     <h3>{song.title}</h3>
     <p>{song.artist}</p>
     <span className="mood">{song.mood}</span>
-
     {embedUrl && (
-      <iframe
-        width="100%"
-        height="200"
-        src={embedUrl}
-        title="YouTube player"
-        frameBorder="0"
-        allowFullScreen
-      ></iframe>
+      <div className="video-wrapper">
+        <iframe
+          src={embedUrl}
+          title="YouTube player"
+          frameBorder="0"
+          allowFullScreen
+        ></iframe>
+      </div>
     )}
-
     <div className="song-actions">
       <button 
         className="icon-button"

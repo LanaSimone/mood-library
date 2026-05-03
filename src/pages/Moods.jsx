@@ -2,13 +2,16 @@ import { useState } from "react";
 import YouTube from "react-youtube";
 
 function Moods({ songs }) {
-  const [selectedMood, setSelectedMood] = useState(null);
+  const [selectedMood, setSelectedMood] = useState(() => {
+    return localStorage.getItem("selectedMood");
+  });
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const groupedSongs = songs.reduce((groups, song) => {
     if (!groups[song.mood]) {
       groups[song.mood] = [];
     }
+
     groups[song.mood].push(song);
     return groups;
   }, {});
@@ -17,21 +20,21 @@ function Moods({ songs }) {
     if (!url) return null;
 
     try {
-        const youtubeUrl = new URL(url);
+      const youtubeUrl = new URL(url);
 
-        if (youtubeUrl.hostname.includes("youtu.be")) {
+      if (youtubeUrl.hostname.includes("youtu.be")) {
         return youtubeUrl.pathname.slice(1);
-        }
+      }
 
-        if (youtubeUrl.hostname.includes("youtube.com")) {
+      if (youtubeUrl.hostname.includes("youtube.com")) {
         return youtubeUrl.searchParams.get("v");
-        }
+      }
 
-        return null;
+      return null;
     } catch {
-        return null;
+      return null;
     }
-    }
+  }
 
   if (selectedMood) {
     const playlist = groupedSongs[selectedMood] || [];
@@ -51,28 +54,39 @@ function Moods({ songs }) {
     }
 
     return (
-      <section className="page">
-        <button onClick={() => setSelectedMood(null)}>
+      <section className="page playlist-page">
+        <button
+          onClick={() => {
+            setSelectedMood(null);
+            localStorage.removeItem("selectedMood");
+          }}
+        >
           Back to moods
         </button>
-        <h2>{selectedMood} Playlist</h2>
+
+        <h2 className="playlist-title">{selectedMood} Playlist</h2>
+
         {currentSong && (
           <div className="player-section">
-            <h3>{currentSong.title}</h3>
-            <p>{currentSong.artist}</p>
+            <div className="player-text">
+              <h3>{currentSong.title}</h3>
+              <p>{currentSong.artist}</p>
+            </div>
+
             {videoId && (
+              <div className="playlist-video-wrapper">
                 <YouTube
-                    videoId={videoId}
-                    opts={{
+                  videoId={videoId}
+                  opts={{
                     width: "100%",
-                    height: "260",
-                    playerVars: {
-                        autoplay: 1
-                    }
-                    }}
-                    onEnd={handleNext}
+                    height: "520",
+                    playerVars: { autoplay: 1 }
+                  }}
+                  onEnd={handleNext}
                 />
+              </div>
             )}
+
             <div className="player-controls">
               <button onClick={handlePrev} disabled={currentIndex === 0}>
                 Prev
@@ -87,6 +101,8 @@ function Moods({ songs }) {
             </div>
           </div>
         )}
+
+        <h4 className="up-next">Up Next</h4>
 
         <div className="playlist-list">
           {playlist.map((song, index) => (
@@ -117,6 +133,7 @@ function Moods({ songs }) {
             className="mood-card"
             onClick={() => {
               setSelectedMood(mood);
+              localStorage.setItem("selectedMood", mood);
               setCurrentIndex(0);
             }}
             style={{ cursor: "pointer" }}

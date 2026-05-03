@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import "./index.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Library from "./pages/Library";
@@ -113,6 +115,7 @@ if (!currentUser) {
   <div>
     <Navbar currentUser={currentUser} onLogout={handleLogout} />
     <Routes>
+      <Route path="/login" element={<Navigate to="/" replace />} />
       <Route
         path="/"
         element={
