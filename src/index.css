@@ -1324,3 +1324,47 @@ a {
   border: 1px solid #7c3aed;
   color: #c4b5fd;
 }
+
+.song-card,
+.mood-card,
+.home-playlist-card,
+.dashboard-card,
+.form-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.song-card:hover,
+.mood-card:hover,
+.home-playlist-card:hover,
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  border-color: #8b5cf6;
+  box-shadow: 0 18px 45px rgba(139, 92, 246, 0.18);
+}
+
+button,
+.action-card {
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover,
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.25);
+}
+
+.page {
+  animation: fadeIn 0.25s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
