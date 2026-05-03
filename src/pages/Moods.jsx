@@ -1,4 +1,5 @@
 import { useState } from "react";
+import YouTube from "react-youtube";
 
 function Moods({ songs }) {
   const [selectedMood, setSelectedMood] = useState(null);
@@ -12,33 +13,30 @@ function Moods({ songs }) {
     return groups;
   }, {});
 
-  function getEmbedUrl(url) {
+  function getYouTubeVideoId(url) {
     if (!url) return null;
 
     try {
-      const youtubeUrl = new URL(url);
+        const youtubeUrl = new URL(url);
 
-      if (youtubeUrl.hostname.includes("youtu.be")) {
-        const videoId = youtubeUrl.pathname.slice(1);
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
+        if (youtubeUrl.hostname.includes("youtu.be")) {
+        return youtubeUrl.pathname.slice(1);
+        }
 
-      if (youtubeUrl.hostname.includes("youtube.com")) {
-        const videoId = youtubeUrl.searchParams.get("v");
-        if (!videoId) return null;
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
+        if (youtubeUrl.hostname.includes("youtube.com")) {
+        return youtubeUrl.searchParams.get("v");
+        }
 
-      return null;
+        return null;
     } catch {
-      return null;
+        return null;
     }
-  }
+    }
 
   if (selectedMood) {
     const playlist = groupedSongs[selectedMood] || [];
     const currentSong = playlist[currentIndex];
-    const embedUrl = getEmbedUrl(currentSong?.songUrl);
+    const videoId = getYouTubeVideoId(currentSong?.songUrl);
 
     function handleNext() {
       if (currentIndex < playlist.length - 1) {
@@ -57,25 +55,24 @@ function Moods({ songs }) {
         <button onClick={() => setSelectedMood(null)}>
           Back to moods
         </button>
-
         <h2>{selectedMood} Playlist</h2>
-
         {currentSong && (
           <div className="player-section">
             <h3>{currentSong.title}</h3>
             <p>{currentSong.artist}</p>
-
-            {embedUrl && (
-              <iframe
-                width="100%"
-                height="220"
-                src={embedUrl}
-                title="YouTube player"
-                frameBorder="0"
-                allowFullScreen
-              />
+            {videoId && (
+                <YouTube
+                    videoId={videoId}
+                    opts={{
+                    width: "100%",
+                    height: "260",
+                    playerVars: {
+                        autoplay: 1
+                    }
+                    }}
+                    onEnd={handleNext}
+                />
             )}
-
             <div className="player-controls">
               <button onClick={handlePrev} disabled={currentIndex === 0}>
                 Prev
