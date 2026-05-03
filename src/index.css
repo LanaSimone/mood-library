@@ -373,3 +373,38 @@ button:hover {
   border-radius: 10px;
   margin-bottom: 16px;
 }
+
+.player-section {
+  margin: 20px 0;
+}
+
+.player-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.playlist-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playlist-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+
+.playlist-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.playlist-item.active {
+  background: rgba(139, 92, 246, 0.25);
+  color: white;
+}

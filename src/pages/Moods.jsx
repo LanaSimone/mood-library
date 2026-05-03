@@ -1,24 +1,56 @@
 import { useState } from "react";
-import SongCard from "../components/SongCard";
 
-function Moods({ songs, moods }) {
+function Moods({ songs }) {
   const [selectedMood, setSelectedMood] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const groupedSongs = songs.reduce((groups, song) => {
     if (!groups[song.mood]) {
       groups[song.mood] = [];
     }
-
     groups[song.mood].push(song);
     return groups;
   }, {});
 
-  if (selectedMood) {
-    const selectedSongs = groupedSongs[selectedMood] || [];
+  function getEmbedUrl(url) {
+    if (!url) return null;
 
-    {selectedSongs.length === 0 && (
-        <p>This playlist is empty.</p>
-    )}
+    try {
+      const youtubeUrl = new URL(url);
+
+      if (youtubeUrl.hostname.includes("youtu.be")) {
+        const videoId = youtubeUrl.pathname.slice(1);
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+
+      if (youtubeUrl.hostname.includes("youtube.com")) {
+        const videoId = youtubeUrl.searchParams.get("v");
+        if (!videoId) return null;
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  if (selectedMood) {
+    const playlist = groupedSongs[selectedMood] || [];
+    const currentSong = playlist[currentIndex];
+    const embedUrl = getEmbedUrl(currentSong?.songUrl);
+
+    function handleNext() {
+      if (currentIndex < playlist.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      }
+    }
+
+    function handlePrev() {
+      if (currentIndex > 0) {
+        setCurrentIndex(currentIndex - 1);
+      }
+    }
 
     return (
       <section className="page">
@@ -27,20 +59,50 @@ function Moods({ songs, moods }) {
         </button>
 
         <h2>{selectedMood} Playlist</h2>
-        <p>
-          {selectedSongs.length} song
-          {selectedSongs.length === 1 ? "" : "s"}
-        </p>
 
-        <div className="song-grid">
-          {selectedSongs.map((song) => (
-            <SongCard
+        {currentSong && (
+          <div className="player-section">
+            <h3>{currentSong.title}</h3>
+            <p>{currentSong.artist}</p>
+
+            {embedUrl && (
+              <iframe
+                width="100%"
+                height="220"
+                src={embedUrl}
+                title="YouTube player"
+                frameBorder="0"
+                allowFullScreen
+              />
+            )}
+
+            <div className="player-controls">
+              <button onClick={handlePrev} disabled={currentIndex === 0}>
+                Prev
+              </button>
+
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === playlist.length - 1}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="playlist-list">
+          {playlist.map((song, index) => (
+            <div
               key={song.id}
-              song={song}
-              moods={moods}
-              onDelete={() => {}}
-              onEdit={() => {}}
-            />
+              className={`playlist-item ${
+                index === currentIndex ? "active" : ""
+              }`}
+              onClick={() => setCurrentIndex(index)}
+            >
+              <span>{song.title}</span>
+              <span>{song.artist}</span>
+            </div>
           ))}
         </div>
       </section>
@@ -50,28 +112,20 @@ function Moods({ songs, moods }) {
   return (
     <section className="page">
       <h2>Mood Playlists</h2>
-      <p>Pick a mood and play songs that match how you feel.</p>
+
       <div className="mood-grid">
-        {Object.keys(groupedSongs).length === 0 && (
-            <p>No playlists yet. Add songs to create your first mood playlist.</p>
-        )}
         {Object.entries(groupedSongs).map(([mood, moodSongs]) => (
           <div
-            className="mood-card"
             key={mood}
+            className="mood-card"
             onClick={() => {
-              console.log("Clicked mood:", mood);
               setSelectedMood(mood);
+              setCurrentIndex(0);
             }}
             style={{ cursor: "pointer" }}
           >
             <h3>{mood}</h3>
-            <p>
-              {moodSongs.length} song
-              {moodSongs.length === 1 ? "" : "s"}
-            </p>
-            <p className="preview-song">{moodSongs[0].title}</p>
-            
+            <p>{moodSongs.length} songs</p>
           </div>
         ))}
       </div>
