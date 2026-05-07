@@ -81,7 +81,7 @@ Use the following credentials to explore the app without creating an account:
 ![Playlist](https://github.com/user-attachments/assets/7cf3b261-915f-4b7e-92bb-e93194460209)
 
 ### 🎵 Mood Playlists
-![Moods](https://github.com/user-attachments/assets/e1007f74-30df-4a3f-9f2d-23fdd9f1430c)="image" src="https://github.com/user-attachments/assets/e1007f74-30df-4a3f-9f2d-23fdd9f1430c" />
+![Moods](https://github.com/user-attachments/assets/e1007f74-30df-4a3f-9f2d-23fdd9f1430c)
 
 ---
 
