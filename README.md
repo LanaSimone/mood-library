@@ -77,10 +77,10 @@ Use the following credentials to explore the app without creating an account:
 ### 📚 Library
 ![Library](https://github.com/user-attachments/assets/2aabaf23-1367-47d1-aa91-a0dd6aeb31a4)
 
-### 🎧 Playlist Player
+### 🎵 Mood Playlists
 ![Playlist](https://github.com/user-attachments/assets/7cf3b261-915f-4b7e-92bb-e93194460209)
 
-### 🎵 Mood Playlists
+### 🎧 Playlist Player
 ![Moods](https://github.com/user-attachments/assets/e1007f74-30df-4a3f-9f2d-23fdd9f1430c)
 
 ---
