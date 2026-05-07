@@ -9,7 +9,7 @@ function Library({ songList, fetchSongs, moods, currentUser }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/songs/${songId}`, {
+      const response = await fetch(`https://mood-library-api.onrender.com/api/songs/${songId}`, {
         method: "DELETE"
       });
 

@@ -42,7 +42,7 @@ function AddSong({ moods, fetchSongs, currentUser }) {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/songs", {
+      const response = await fetch("https://mood-library-api.onrender.com/api/songs", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
